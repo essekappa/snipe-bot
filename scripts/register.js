@@ -8,10 +8,10 @@ const guild = process.argv[2];
 const commands = [
 	{
 		name: "snipe",
-		description: "Mostra l ultimo messaggio eliminato in un canale",
+		description: "Shows the last deleted message from a specified channel!",
 		options: [
 			{
-				type: 7,
+				type: 7, // text channel
 				name: "channel",
 				description: "The channel to snipe",
 			},
@@ -19,10 +19,10 @@ const commands = [
 	},
 	{
 		name: "editsnipe",
-		description: "Mostra l ultimo messaggio modificato in un canale",
+		description: "Shows the last edited message from a specified channel!",
 		options: [
 			{
-				type: 7,
+				type: 7, // text channel
 				name: "channel",
 				description: "The channel to snipe",
 			},
@@ -31,18 +31,19 @@ const commands = [
 	{
 		name: "reactionsnipe",
 		description:
-			"Mostra l ultima reazione rimossa in un messaggio in un canale",
+			"Shows the last removed reaction from a specified channel!",
 		options: [
 			{
-				type: 7, 
+				type: 7, // text channel
 				name: "channel",
 				description: "The channel to snipe",
 			},
 		],
 	},
 	{
-		name: "Github",
+		name: "github",
 		description: "Mostra i file del bot",
+    type:"CHAT_INPUT"
 	},
 ];
 

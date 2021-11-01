@@ -1,4 +1,4 @@
-const { Client, Intents, MessageEmbed } = require("discord.js");
+const { Client, Intents, MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 const client = new Client({
 	intents: [
 		Intents.FLAGS.GUILDS,
@@ -15,16 +15,28 @@ const reactionSnipes = {};
 
 const formatEmoji = (emoji) => {
 	return !emoji.id || emoji.available
-		? emoji.toString()
-		: `[:${emoji.name}:](${emoji.url})`; 
+		? emoji.toString() // bot has access or unicode emoji
+		: `[:${emoji.name}:](${emoji.url})`; // bot cannot use the emoji
 };
 
 client.on("ready", () => {
-	console.log(`[sniper] :: Online come: ${client.user.tag}.`);
+	console.log(`[sniper] :: Logged in as ${client.user.tag}.`);
 });
+const express = require('express')
+const app = express()
 
+app.all('/', (req, res) =>{
+  res.send('online my boi')
+})
+function keepAlive() {
+  app.listen(3000, () => {console.log("server is ready")
+  })
+}
+
+
+keepAlive()
 client.on("messageDelete", async (message) => {
-	if (message.partial || (message.embeds.length && !message.content)) return; 
+	if (message.partial || (message.embeds.length && !message.content)) return; // content is null or deleted embed
 
 	snipes[message.channel.id] = {
 		author: message.author,
@@ -37,7 +49,7 @@ client.on("messageDelete", async (message) => {
 });
 
 client.on("messageUpdate", async (oldMessage, newMessage) => {
-	if (oldMessage.partial) return; 
+	if (oldMessage.partial) return; // content is null
 
 	editSnipes[oldMessage.channel.id] = {
 		author: oldMessage.author,
@@ -66,7 +78,7 @@ client.on("interactionCreate", async (interaction) => {
 	if (interaction.commandName === "snipe") {
 		const snipe = snipes[channel.id];
 
-		if (!snipe) return interaction.reply("mh, non c'è niente da individuare");
+		if (!snipe) return interaction.reply("There's nothing to snipe!");
 
 		const embed = new MessageEmbed()
 			.setAuthor(snipe.author.tag)
@@ -90,7 +102,7 @@ client.on("interactionCreate", async (interaction) => {
 								.setTimestamp(snipe.createdAt),
 						],
 				  }
-				: "mh, non c'è niente da individuare"
+				: "There's nothing to snipe!"
 		);
 	} else if (interaction.commandName === "reactionsnipe") {
 		const snipe = reactionSnipes[channel.id];
@@ -101,26 +113,29 @@ client.on("interactionCreate", async (interaction) => {
 						embeds: [
 							new MessageEmbed()
 								.setDescription(
-									`Reagito con ${formatEmoji(
+									`reacted with ${formatEmoji(
 										snipe.emoji
-									)} su: [this message](${snipe.messageURL})`
+									)} on [this message](${snipe.messageURL})`
 								)
 								.setAuthor(snipe.user.tag)
 								.setFooter(`#${channel.name}`)
 								.setTimestamp(snipe.createdAt),
 						],
 				  }
-				: "mh, non c'è niente da individuare"
+				: "There's nothing to snipe!"
 		);
 	}else if (interaction.commandName === "github") {
-	const button = new MessageButton()
+    const row = new MessageActionRow()
+			.addComponents(
+			new MessageButton()
 	.setLabel('Github')
 	.setStyle('LINK')
 	.setURL("https://github.com/essekappa/snipe-bot")
+			);
 		const git = new MessageEmbed()
 		.setTitle("Mio github")
-		.setDescription("(qui)[https://github.com/essekappa/snipe-bot] ci sono tutti i miei file.")
-		await interaction.reply({embeds: [git], components: [button]})
+		.setDescription("[qui](https://github.com/essekappa/snipe-bot) ci sono tutti i miei file.")
+		await interaction.reply({embeds: [git], components: [row]})
 
 	}
 });
