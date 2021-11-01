@@ -15,16 +15,16 @@ const reactionSnipes = {};
 
 const formatEmoji = (emoji) => {
 	return !emoji.id || emoji.available
-		? emoji.toString() // bot has access or unicode emoji
-		: `[:${emoji.name}:](${emoji.url})`; // bot cannot use the emoji
+		? emoji.toString()
+		: `[:${emoji.name}:](${emoji.url})`; 
 };
 
 client.on("ready", () => {
-	console.log(`[sniper] :: Logged in as ${client.user.tag}.`);
+	console.log(`[sniper] :: Online come: ${client.user.tag}.`);
 });
 
 client.on("messageDelete", async (message) => {
-	if (message.partial || (message.embeds.length && !message.content)) return; // content is null or deleted embed
+	if (message.partial || (message.embeds.length && !message.content)) return; 
 
 	snipes[message.channel.id] = {
 		author: message.author,
@@ -37,7 +37,7 @@ client.on("messageDelete", async (message) => {
 });
 
 client.on("messageUpdate", async (oldMessage, newMessage) => {
-	if (oldMessage.partial) return; // content is null
+	if (oldMessage.partial) return; 
 
 	editSnipes[oldMessage.channel.id] = {
 		author: oldMessage.author,
@@ -66,7 +66,7 @@ client.on("interactionCreate", async (interaction) => {
 	if (interaction.commandName === "snipe") {
 		const snipe = snipes[channel.id];
 
-		if (!snipe) return interaction.reply("There's nothing to snipe!");
+		if (!snipe) return interaction.reply("mh, non c'è niente da individuare");
 
 		const embed = new MessageEmbed()
 			.setAuthor(snipe.author.tag)
@@ -90,7 +90,7 @@ client.on("interactionCreate", async (interaction) => {
 								.setTimestamp(snipe.createdAt),
 						],
 				  }
-				: "There's nothing to snipe!"
+				: "mh, non c'è niente da individuare"
 		);
 	} else if (interaction.commandName === "reactionsnipe") {
 		const snipe = reactionSnipes[channel.id];
@@ -101,16 +101,16 @@ client.on("interactionCreate", async (interaction) => {
 						embeds: [
 							new MessageEmbed()
 								.setDescription(
-									`reacted with ${formatEmoji(
+									`Reagito con ${formatEmoji(
 										snipe.emoji
-									)} on [this message](${snipe.messageURL})`
+									)} su: [this message](${snipe.messageURL})`
 								)
 								.setAuthor(snipe.user.tag)
 								.setFooter(`#${channel.name}`)
 								.setTimestamp(snipe.createdAt),
 						],
 				  }
-				: "There's nothing to snipe!"
+				: "mh, non c'è niente da individuare"
 		);
 	}
 });
