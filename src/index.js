@@ -112,6 +112,16 @@ client.on("interactionCreate", async (interaction) => {
 				  }
 				: "mh, non c'è niente da individuare"
 		);
+	}else if (interaction.commandName === "github") {
+	const button = new MessageButton()
+	.setLabel('Github')
+	.setStyle('LINK')
+	.setURL("https://github.com/essekappa/snipe-bot")
+		const git = new MessageEmbed()
+		.setTitle("Mio github")
+		.setDescription("(qui)[https://github.com/essekappa/snipe-bot] ci sono tutti i miei file.")
+		await interaction.reply({embeds: [git], components: [button]})
+
 	}
 });
 

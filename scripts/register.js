@@ -40,6 +40,10 @@ const commands = [
 			},
 		],
 	},
+	{
+		name: "Github",
+		description: "Mostra i file del bot",
+	},
 ];
 
 const rest = new REST({ version: "9" }).setToken(token);
